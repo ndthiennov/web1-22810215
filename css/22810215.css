@@ -90,6 +90,11 @@ h1 {
     background-color: var(--web1-green);
 }
 
+#banner-small {
+    background-image: url('../images/bg-banner.gif');
+    padding: 5px;
+}
+
 /* Products */
 .readmore {
     color: var(--web1-blue);
@@ -109,6 +114,8 @@ h1 {
 /* News */
 #news .date {
     background-color: var(--web1-green);
+    width: 5rem;
+    padding: 1.5rem;
 
 }
 
