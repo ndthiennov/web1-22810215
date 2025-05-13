@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php';
+// require 'vendor/autoload.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
