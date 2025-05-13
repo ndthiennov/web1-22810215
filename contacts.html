@@ -136,7 +136,7 @@
                     <textarea class="form-control mb-3" name="message" id="message" rows="3" required></textarea>
                     <div class="row">
                         <div class="col">
-                            <div id="responseMessage" class="text-success"></div>
+                            <div id="responseMessage" class="text-primary"></div>
                         </div>
                         <div class="col">
                             <div class="text-end">
@@ -266,17 +266,51 @@
                         let responseMessage = document.getElementById("responseMessage");
                         responseMessage.innerHTML = 'Error: Can not verify RECAPTCHA';
                         responseMessage.classList.remove();
-                        responseMessage.classList.toggle('text-danger');
+                        responseMessage.className = 'text-danger';
                     }
                 });
             });
+            
+            //sendMail();
         }
 
-        function sendMail() {
+        async function sendMail() {
             let responseMessage = document.getElementById("responseMessage");
-            responseMessage.innerHTML = 'OK';
-            responseMessage.classList.remove();
-            responseMessage.classList.toggle('text-success');
+            try {
+                let token = await getAuthenticateToken('test', '1c3cr3@m');
+                let postData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    copy: document.getElementById('copy').value
+                }
+                let response = await fetch(`${AUTHENTICATE_API}/send`, {
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                let result = await response.json();
+                if (response.status == 200) {
+                    responseMessage.innerHTML = result.message;
+                    responseMessage.classList.remove();
+                    responseMessage.className = 'text-primary';
+                }
+                else {
+                    throw new Error(result.message);
+                }
+            }
+            catch (error) {
+                console.log(error);
+                responseMessage.innerHTML = error;
+                responseMessage.classList.remove();
+                responseMessage.className = 'text-danger';
+            }
         }
     </script>
 
