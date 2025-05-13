@@ -134,18 +134,24 @@
                 <div class="mb-3">
                     <label for="message" class="form-label">Message *</label>
                     <textarea class="form-control mb-3" name="message" id="message" rows="3" required></textarea>
-                    <div class="text-end">
-                        <div class="form-check">
-                            <label class="form-check-label" for="copy"> Send copy to yourself&nbsp; </label>
-                            <input type="checkbox" value="1" id="copy" /> &nbsp;&nbsp;
-                            <button type="submit" class="btn btn-primary">
-                                Send email to Us
-                            </button>
+                    <div class="row">
+                        <div class="col">
+                            <div id="responseMessage" class="text-success"></div>
+                        </div>
+                        <div class="col">
+                            <div class="text-end">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="copy"> Send copy to yourself&nbsp; </label>
+                                    <input type="checkbox" value="1" id="copy" /> &nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary">
+                                        Send email to Us
+                                    </button>
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="responseMessage" class="text-danger text-center"></div>
             </form>
         </div>
     </section>
@@ -244,27 +250,33 @@
         function onSubmit(e) {
             e.preventDefault();
             grecaptcha.enterprise.ready(async () => {
-                const token = await grecaptcha.enterprise.execute('6LfAjTcrAAAAAJ4CaFltGfPXKrHb9NFk81MpQfZY', { action: 'SUBMIT' }).then(async function(token) {
+                const token = await grecaptcha.enterprise.execute('6LfAjTcrAAAAAJ4CaFltGfPXKrHb9NFk81MpQfZY', { action: 'SUBMIT' }).then(async function (token) {
                     let response = await fetch('verify.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({'g-token': token})
+                        body: JSON.stringify({ 'g-token': token })
                     });
-                    if(response.status == 200){
+                    if (response.status == 200) {
                         sendMail();
                     }
                     else {
-                        document.getElementById("responseMessage").innerHTML = 'Error: Can not verify RECAPTCHA'
+                        let responseMessage = document.getElementById("responseMessage");
+                        responseMessage.innerHTML = 'Error: Can not verify RECAPTCHA';
+                        responseMessage.classList.remove();
+                        responseMessage.classList.toggle('text-danger');
                     }
                 });
             });
         }
 
-        function sendMail(){
-            document.getElementById("responseMessage").innerHTML = 'OK';
+        function sendMail() {
+            let responseMessage = document.getElementById("responseMessage");
+            responseMessage.innerHTML = 'OK';
+            responseMessage.classList.remove();
+            responseMessage.classList.toggle('text-success');
         }
     </script>
 
