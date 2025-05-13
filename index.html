@@ -62,8 +62,10 @@
                             <a onclick="logout()" class="nav-link linkLogout" href="#" style="display: none;">Logout</a>
                         </li>
                     </ul>
-                    <form class="d-flex my-2 my-lg-0 border rounded-pill" id="formSearch" method="GET" action="search.html">
-                        <input class="form-control ms-3 border-0" type="text" placeholder="Search" name="keyword" id="keyword" required />
+                    <form class="d-flex my-2 my-lg-0 border rounded-pill" id="formSearch" method="GET"
+                        action="search.html">
+                        <input class="form-control ms-3 border-0" type="text" placeholder="Search" name="keyword"
+                            id="keyword" required />
                         <button class="btn my-2 my-sm-0 border-0" type="submit">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -198,8 +200,8 @@
                     <form action="#" method="post" id="formLogin" onsubmit="login(event)">
                         <h3 class="text-center">Login Form</h3>
                         <div class="mb-3">
-                            <input type="text" name="username" id="username" placeholder="Username"
-                                class="form-control" required>
+                            <input type="text" name="username" id="username" placeholder="Username" class="form-control"
+                                required>
                         </div>
                         <div class="mb-3">
                             <input type="password" name="password" id="password" placeholder="Password"
@@ -249,7 +251,8 @@
                 src="{{imagepath}}" alt="{{name}}" />
                 <h3>{{name}}</h3>
                 <p class="text-black-50">{{sumary}}</p>
-                <a onclick="loadData('products/{{id}}', 'details-template', 'content')" class="readmore btn btn-link mt-0 pt-0" href="#">Read more</a>
+                <!-- <a onclick="loadData('products/{{id}}', 'details-template', 'content')" class="readmore btn btn-link mt-0 pt-0" href="#">Read more</a> -->
+                 <a class="readmore btn btn-link mt-0 pt-0" href="?request=products/{{id}}">Read more</a>
             </div>
             {{/each}}
         </div>
@@ -265,7 +268,8 @@
                         <h3>{{date}}
                         </h3>
                     </div>
-                    <a onclick="loadData('news/{{id}}', 'details-template', 'content')" href="#" class="btn btn-link readmore ps-0">Read more</a>
+                    <!-- <a onclick="loadData('news/{{id}}', 'details-template', 'content')" href="#" class="btn btn-link readmore ps-0">Read more</a> -->
+                    <a href="?request=news/{{id}}" class="btn btn-link readmore ps-0">Read more</a>
                 </div>
                 <div>
                     <h3>{{name}}</h3>
@@ -288,6 +292,17 @@
      </script>
 
     <script>
+        let searchParams = new URLSearchParams(location.search);
+        let request = searchParams.get('request');
+        if (request) {
+            loadData(request, 'details-template', 'content');
+        }
+        else {
+            checkLogin();
+
+            loadData('products', 'products-template', 'products');
+            loadData('news', 'news-template', 'news');
+        }
         // (async function () {
         //     const response = await fetch('https://web1-api.vercel.app/api/products');
         //     const data = await response.json();
@@ -302,10 +317,10 @@
         //     view.innerHTML = template(context);
         // })();
 
-        checkLogin();
+        // checkLogin();
 
-        loadData('products', 'products-template', 'products');
-        loadData('news', 'news-template', 'news');
+        // loadData('products', 'products-template', 'products');
+        // loadData('news', 'news-template', 'news');
 
         function setActiveImagepath(img, imagepath, isActive = true) {
             if (isActive) {
